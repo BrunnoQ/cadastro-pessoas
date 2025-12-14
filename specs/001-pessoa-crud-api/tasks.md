@@ -131,36 +131,36 @@ Based on Clean Architecture single-project structure (Go):
 
 ### Domain Layer (Entities)
 
-- [ ] T038 [P] [US1] Create Person entity in internal/domain/entities/person.go
-- [ ] T039 [P] [US1] Create Address value object in internal/domain/entities/address.go
-- [ ] T040 [P] [US1] Create Contact value object in internal/domain/entities/contact.go
-- [ ] T041 [P] [US1] Implement Person.NewPerson() constructor with validation
-- [ ] T042 [P] [US1] Implement Person.AddAddress() method with validation
-- [ ] T043 [P] [US1] Implement Person.AddContact() method with validation
-- [ ] T044 [P] [US1] Implement Address.Validate() method
-- [ ] T045 [P] [US1] Implement Contact.Validate() method
+- [X] T038 [P] [US1] Create Person entity in internal/domain/entities/person.go
+- [X] T039 [P] [US1] Create Address value object in internal/domain/entities/address.go
+- [X] T040 [P] [US1] Create Contact value object in internal/domain/entities/contact.go
+- [X] T041 [P] [US1] Implement Person.NewPerson() constructor with validation
+- [X] T042 [P] [US1] Implement Person.AddAddress() method with validation
+- [X] T043 [P] [US1] Implement Person.AddContact() method with validation
+- [X] T044 [P] [US1] Implement Address.Validate() method
+- [X] T045 [P] [US1] Implement Contact.Validate() method
 
 ### Domain Layer (Repository Interface)
 
-- [ ] T046 [US1] Create PersonRepository interface in internal/domain/repositories/person_repository.go with Create method
+- [X] T046 [US1] Create PersonRepository interface in internal/domain/repositories/person_repository.go with Create method
 
 ### Application Layer (Use Case)
 
-- [ ] T047 [US1] Create CreatePersonRequest DTO in internal/application/dto/person_request.go
-- [ ] T048 [US1] Create PersonResponse DTO in internal/application/dto/person_response.go
-- [ ] T049 [US1] Implement CreatePersonUseCase in internal/application/usecases/create_person.go
+- [X] T047 [US1] Create CreatePersonRequest DTO in internal/application/dto/person_request.go
+- [X] T048 [US1] Create PersonResponse DTO in internal/application/dto/person_response.go
+- [X] T049 [US1] Implement CreatePersonUseCase in internal/application/usecases/create_person.go
 
 ### Infrastructure Layer (MongoDB Repository)
 
-- [ ] T050 [US1] Implement MongoPersonRepository.Create() in internal/infrastructure/persistence/mongodb/person_repository.go
-- [ ] T051 [US1] Create MongoDB indexes (_id, created_at) in internal/infrastructure/persistence/mongodb/indexes.go
+- [X] T050 [US1] Implement MongoPersonRepository.Create() in internal/infrastructure/persistence/mongodb/person_repository.go
+- [X] T051 [US1] Create MongoDB indexes (_id, created_at) in internal/infrastructure/persistence/mongodb/indexes.go
 
 ### Presentation Layer (HTTP)
 
-- [ ] T052 [US1] Create HTTP CreatePersonRequest DTO in internal/presentation/dto/request.go
-- [ ] T053 [US1] Create HTTP PersonResponse DTO in internal/presentation/dto/response.go
-- [ ] T054 [US1] Implement PersonHandler.Create() in internal/presentation/http/handlers/person_handler.go
-- [ ] T055 [US1] Register POST /api/v1/persons route in internal/presentation/http/router.go
+- [X] T052 [US1] Create HTTP CreatePersonRequest DTO in internal/presentation/dto/request.go
+- [X] T053 [US1] Create HTTP PersonResponse DTO in internal/presentation/dto/response.go
+- [X] T054 [US1] Implement PersonHandler.Create() in internal/presentation/http/handlers/person_handler.go
+- [X] T055 [US1] Register POST /api/v1/persons route in internal/presentation/http/router.go
 
 ### Tests
 
@@ -184,20 +184,20 @@ Based on Clean Architecture single-project structure (Go):
 
 ### Domain Layer (Repository Interface)
 
-- [ ] T061 [US2] Add FindByID method to PersonRepository interface in internal/domain/repositories/person_repository.go
+- [X] T061 [US2] Add FindByID method to PersonRepository interface in internal/domain/repositories/person_repository.go
 
 ### Application Layer (Use Case)
 
-- [ ] T062 [US2] Implement GetPersonUseCase in internal/application/usecases/get_person.go
+- [X] T062 [US2] Implement GetPersonUseCase in internal/application/usecases/get_person.go
 
 ### Infrastructure Layer (MongoDB Repository)
 
-- [ ] T063 [US2] Implement MongoPersonRepository.FindByID() in internal/infrastructure/persistence/mongodb/person_repository.go
+- [X] T063 [US2] Implement MongoPersonRepository.FindByID() in internal/infrastructure/persistence/mongodb/person_repository.go
 
 ### Presentation Layer (HTTP)
 
-- [ ] T064 [US2] Implement PersonHandler.GetByID() in internal/presentation/http/handlers/person_handler.go
-- [ ] T065 [US2] Register GET /api/v1/persons/:id route in internal/presentation/http/router.go
+- [X] T064 [US2] Implement PersonHandler.GetByID() in internal/presentation/http/handlers/person_handler.go
+- [X] T065 [US2] Register GET /api/v1/persons/:id route in internal/presentation/http/router.go
 
 ### Tests
 
@@ -219,24 +219,24 @@ Based on Clean Architecture single-project structure (Go):
 
 ### Domain Layer (Repository Interface)
 
-- [ ] T069 [US3] Add FindAll method with pagination to PersonRepository interface in internal/domain/repositories/person_repository.go
+- [X] T069 [US3] Add FindAll method with pagination to PersonRepository interface in internal/domain/repositories/person_repository.go
 
 ### Application Layer (DTOs & Use Case)
 
-- [ ] T070 [US3] Create PersonSummaryResponse DTO in internal/application/dto/person_response.go
-- [ ] T071 [US3] Create PaginationResponse DTO in internal/application/dto/pagination.go
-- [ ] T072 [US3] Create ListPersonsResponse DTO in internal/application/dto/person_response.go
-- [ ] T073 [US3] Implement ListPersonsUseCase in internal/application/usecases/list_persons.go
+- [X] T070 [US3] Create PersonSummaryResponse DTO in internal/application/dto/person_response.go
+- [X] T071 [US3] Create PaginationResponse DTO in internal/application/dto/pagination.go
+- [X] T072 [US3] Create ListPersonsResponse DTO in internal/application/dto/person_response.go
+- [X] T073 [US3] Implement ListPersonsUseCase in internal/application/usecases/list_persons.go
 
 ### Infrastructure Layer (MongoDB Repository)
 
-- [ ] T074 [US3] Implement MongoPersonRepository.FindAll() with pagination in internal/infrastructure/persistence/mongodb/person_repository.go
+- [X] T074 [US3] Implement MongoPersonRepository.FindAll() with pagination in internal/infrastructure/persistence/mongodb/person_repository.go
 
 ### Presentation Layer (HTTP)
 
-- [ ] T075 [US3] Create pagination request parser in internal/presentation/dto/pagination.go
-- [ ] T076 [US3] Implement PersonHandler.List() in internal/presentation/http/handlers/person_handler.go
-- [ ] T077 [US3] Register GET /api/v1/persons route (list) in internal/presentation/http/router.go
+- [X] T075 [US3] Create pagination request parser in internal/presentation/dto/pagination.go
+- [X] T076 [US3] Implement PersonHandler.List() in internal/presentation/http/handlers/person_handler.go
+- [X] T077 [US3] Register GET /api/v1/persons route (list) in internal/presentation/http/router.go
 
 ### Tests
 
@@ -258,21 +258,21 @@ Based on Clean Architecture single-project structure (Go):
 
 ### Domain Layer (Repository Interface)
 
-- [ ] T081 [US4] Add Update method to PersonRepository interface in internal/domain/repositories/person_repository.go
+- [X] T081 [US4] Add Update method to PersonRepository interface in internal/domain/repositories/person_repository.go
 
 ### Application Layer (DTOs & Use Case)
 
-- [ ] T082 [US4] Create UpdatePersonRequest DTO in internal/application/dto/person_request.go
-- [ ] T083 [US4] Implement UpdatePersonUseCase in internal/application/usecases/update_person.go
+- [X] T082 [US4] Create UpdatePersonRequest DTO in internal/application/dto/person_request.go
+- [X] T083 [US4] Implement UpdatePersonUseCase in internal/application/usecases/update_person.go
 
 ### Infrastructure Layer (MongoDB Repository)
 
-- [ ] T084 [US4] Implement MongoPersonRepository.Update() with optimistic locking in internal/infrastructure/persistence/mongodb/person_repository.go
+- [X] T084 [US4] Implement MongoPersonRepository.Update() with optimistic locking in internal/infrastructure/persistence/mongodb/person_repository.go
 
 ### Presentation Layer (HTTP)
 
-- [ ] T085 [US4] Implement PersonHandler.Update() in internal/presentation/http/handlers/person_handler.go
-- [ ] T086 [US4] Register PUT /api/v1/persons/:id route in internal/presentation/http/router.go
+- [X] T085 [US4] Implement PersonHandler.Update() in internal/presentation/http/handlers/person_handler.go
+- [X] T086 [US4] Register PUT /api/v1/persons/:id route in internal/presentation/http/router.go
 
 ### Tests
 

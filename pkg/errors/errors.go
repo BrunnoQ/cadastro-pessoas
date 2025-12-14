@@ -73,3 +73,19 @@ func NewConcurrencyError(message string) *AppError {
 		Message: message,
 	}
 }
+
+// IsNotFoundError checks if an error is a not found error
+func IsNotFoundError(err error) bool {
+	if appErr, ok := err.(*AppError); ok {
+		return appErr.Code == CodeNotFound || appErr.Code == CodePersonNotFound
+	}
+	return false
+}
+
+// IsConcurrencyError checks if an error is a concurrency error
+func IsConcurrencyError(err error) bool {
+	if appErr, ok := err.(*AppError); ok {
+		return appErr.Code == CodeConcurrency
+	}
+	return false
+}

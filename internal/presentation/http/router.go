@@ -3,23 +3,28 @@ package http
 import (
 	"net/http"
 
+	"github.com/BrunnoQ/cadastro-pessoas/internal/presentation/http/handlers"
 	"github.com/gin-gonic/gin"
 )
 
 // Router manages HTTP routes and middleware
 type Router struct {
-	engine *gin.Engine
+	engine        *gin.Engine
+	healthHandler *handlers.HealthHandler
+	personHandler *handlers.PersonHandler
 }
 
 // NewRouter creates a new HTTP router
-func NewRouter() *Router {
+func NewRouter(healthHandler *handlers.HealthHandler, personHandler *handlers.PersonHandler) *Router {
 	// Set Gin mode based on environment
 	gin.SetMode(gin.ReleaseMode)
 
 	engine := gin.New()
 
 	return &Router{
-		engine: engine,
+		engine:        engine,
+		healthHandler: healthHandler,
+		personHandler: personHandler,
 	}
 }
 
@@ -34,11 +39,13 @@ func (r *Router) SetupRoutes() {
 	v1 := r.engine.Group("/api/v1")
 	{
 		// Health check endpoint
-		v1.GET("/health", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"status": "healthy",
-			})
-		})
+		v1.GET("/health", r.healthHandler.Check)
+
+		// Person endpoints
+		v1.GET("/persons", r.personHandler.List)
+		v1.POST("/persons", r.personHandler.Create)
+		v1.GET("/persons/:id", r.personHandler.GetByID)
+		v1.PUT("/persons/:id", r.personHandler.Update)
 	}
 }
 

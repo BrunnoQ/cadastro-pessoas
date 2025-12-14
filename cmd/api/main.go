@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/BrunnoQ/cadastro-pessoas/internal/application/usecases"
 	"github.com/BrunnoQ/cadastro-pessoas/internal/infrastructure/config"
 	"github.com/BrunnoQ/cadastro-pessoas/internal/infrastructure/logger"
 	"github.com/BrunnoQ/cadastro-pessoas/internal/infrastructure/persistence/mongodb"
@@ -76,6 +77,15 @@ func main() {
 
 	log.Info("Database indexes initialized")
 
+	// Initialize repositories
+	personRepo := mongodb.NewMongoPersonRepository(dbConn.Database)
+
+	// Initialize use cases
+	createPersonUseCase := usecases.NewCreatePersonUseCase(personRepo, log)
+	getPersonUseCase := usecases.NewGetPersonUseCase(personRepo, log)
+	listPersonsUseCase := usecases.NewListPersonsUseCase(personRepo, log)
+	updatePersonUseCase := usecases.NewUpdatePersonUseCase(personRepo, log)
+
 	// Set Gin mode
 	if cfg.Server.Mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
@@ -83,8 +93,12 @@ func main() {
 		gin.SetMode(gin.DebugMode)
 	}
 
+	// Initialize handlers
+	healthHandler := handlers.NewHealthHandler(dbConn)
+	personHandler := handlers.NewPersonHandler(createPersonUseCase, getPersonUseCase, listPersonsUseCase, updatePersonUseCase, log)
+
 	// Create HTTP router
-	router := httpHandler.NewRouter()
+	router := httpHandler.NewRouter(healthHandler, personHandler)
 	engine := router.Engine()
 
 	// Apply middleware
@@ -93,14 +107,8 @@ func main() {
 	engine.Use(middleware.CORSMiddleware())
 	engine.Use(middleware.ValidationMiddleware())
 
-	// Initialize handlers
-	healthHandler := handlers.NewHealthHandler(dbConn)
-
 	// Setup routes
-	v1 := engine.Group("/api/v1")
-	{
-		v1.GET("/health", healthHandler.Check)
-	}
+	router.SetupRoutes()
 
 	// Create HTTP server
 	server := &http.Server{
