@@ -31,7 +31,17 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify compliance with constitution principles:
+
+- [ ] **Clean Code**: Code structure follows naming conventions, single responsibility, DRY
+- [ ] **Clean Architecture**: Proper layer separation (Entities → Use Cases → Interface Adapters → Frameworks)
+- [ ] **Code Reusability**: Common logic extracted, no duplication, composition over inheritance
+- [ ] **Design Patterns**: Appropriate patterns applied (Repository, Factory, Strategy, etc.)
+- [ ] **Function Cohesion**: Functions are small, focused, single-purpose with minimal parameters
+- [ ] **Testability**: Business logic independent of frameworks and external dependencies
+- [ ] **Quality Gates**: Linting, formatting, test coverage (80%+), documentation
+
+*Note: Any violations must be justified in the Complexity Tracking section below*
 
 ## Project Structure
 
@@ -56,31 +66,55 @@ specs/[###-feature]/
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT) - Clean Architecture
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
+├── domain/              # Entities layer (business rules)
+│   ├── entities/       # Core business objects
+│   └── repositories/   # Repository interfaces
+├── application/         # Use Cases layer (application logic)
+│   ├── use_cases/      # Business workflows
+│   └── services/       # Application services
+├── infrastructure/      # Frameworks & Drivers layer
+│   ├── persistence/    # Database implementations
+│   ├── external/       # External service clients
+│   └── config/         # Configuration
+└── presentation/        # Interface Adapters layer
+    ├── api/            # REST/GraphQL controllers
+    ├── cli/            # CLI interface
+    └── dto/            # Data transfer objects
 
 tests/
-├── contract/
-├── integration/
-└── unit/
+├── unit/               # Unit tests for use cases & entities
+├── integration/        # Integration tests for infrastructure
+└── contract/           # API contract tests
 
 # [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
 backend/
 ├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
+│   ├── domain/         # Entities layer
+│   │   ├── entities/
+│   │   └── repositories/
+│   ├── application/    # Use Cases layer
+│   │   ├── use_cases/
+│   │   └── services/
+│   ├── infrastructure/ # Frameworks & Drivers
+│   │   ├── persistence/
+│   │   ├── external/
+│   │   └── config/
+│   └── presentation/   # Interface Adapters
+│       ├── api/
+│       └── dto/
 └── tests/
 
 frontend/
 ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
+│   ├── domain/         # Business models
+│   ├── application/    # Services & state management
+│   ├── infrastructure/ # API clients, storage
+│   └── presentation/   # Components, pages, views
+│       ├── components/
+│       ├── pages/
+│       └── hooks/
 └── tests/
 
 # [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
@@ -88,7 +122,13 @@ api/
 └── [same as backend above]
 
 ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+├── Domain/             # Entities & business rules
+├── Application/        # Use cases & services
+├── Infrastructure/     # Data sources, network
+└── Presentation/       # UI, ViewModels, Controllers
+    ├── Views/
+    ├── ViewModels/
+    └── Controllers/
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real

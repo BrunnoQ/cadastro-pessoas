@@ -20,9 +20,18 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
+- **Single project (Clean Architecture)**: 
+  - `src/domain/` - Entities and repository interfaces
+  - `src/application/` - Use cases and services
+  - `src/infrastructure/` - External dependencies (DB, APIs, config)
+  - `src/presentation/` - Controllers, CLI, API handlers
+  - `tests/` at repository root
+- **Web app**: 
+  - `backend/src/` - Backend with Clean Architecture layers
+  - `frontend/src/` - Frontend with domain, application, infrastructure, presentation
+- **Mobile**: 
+  - `api/src/` - API with Clean Architecture layers
+  - `ios/` or `android/` - Platform-specific with Domain, Application, Infrastructure, Presentation
 - Paths shown below assume single project - adjust based on plan.md structure
 
 <!-- 
@@ -88,12 +97,14 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T012 [P] [US1] Create [Entity1] in src/domain/entities/[entity1].py
+- [ ] T013 [P] [US1] Create [Entity2] in src/domain/entities/[entity2].py
+- [ ] T014 [P] [US1] Define [Repository] interface in src/domain/repositories/[repository].py
+- [ ] T015 [US1] Implement [UseCase] in src/application/use_cases/[use_case].py (depends on T012, T013)
+- [ ] T016 [US1] Implement [Repository] in src/infrastructure/persistence/[repository_impl].py
+- [ ] T017 [US1] Create [Controller/Handler] in src/presentation/api/[controller].py
+- [ ] T018 [US1] Add validation and error handling
+- [ ] T019 [US1] Add logging for user story 1 operations
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
 
@@ -112,9 +123,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T020 [P] [US2] Create [Entity] in src/domain/entities/[entity].py
+- [ ] T021 [US2] Implement [UseCase] in src/application/use_cases/[use_case].py
+- [ ] T022 [US2] Create [Controller/Handler] in src/presentation/api/[controller].py
 - [ ] T023 [US2] Integrate with User Story 1 components (if needed)
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
@@ -134,9 +145,9 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create [Entity] in src/domain/entities/[entity].py
+- [ ] T027 [US3] Implement [UseCase] in src/application/use_cases/[use_case].py
+- [ ] T028 [US3] Create [Controller/Handler] in src/presentation/api/[controller].py
 
 **Checkpoint**: All user stories should now be independently functional
 
@@ -202,9 +213,10 @@ Examples of foundational tasks (adjust based on your project):
 Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
 Task: "Integration test for [user journey] in tests/integration/test_[name].py"
 
-# Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
+# Launch all domain models for User Story 1 together:
+Task: "Create [Entity1] in src/domain/entities/[entity1].py"
+Task: "Create [Entity2] in src/domain/entities/[entity2].py"
+Task: "Define [Repository] interface in src/domain/repositories/[repository].py"
 ```
 
 ---
