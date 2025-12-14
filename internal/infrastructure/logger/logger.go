@@ -2,8 +2,8 @@ package logger
 
 import (
 	"fmt"
+	"os"
 
-	"go.uber.org/zap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -26,7 +26,7 @@ func New(cfg Config) (*Logger, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid log level: %w", err)
 	}
-	
+
 	// Create encoder config
 	encoderConfig := zap.NewProductionEncoderConfig()
 	encoderConfig.TimeKey = "timestamp"
@@ -34,7 +34,7 @@ func New(cfg Config) (*Logger, error) {
 	encoderConfig.StacktraceKey = "stacktrace"
 	encoderConfig.CallerKey = "caller"
 	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-	
+
 	// Create encoder based on format
 	var encoder zapcore.Encoder
 	if cfg.Format == "json" {
@@ -43,20 +43,20 @@ func New(cfg Config) (*Logger, error) {
 		encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		encoder = zapcore.NewConsoleEncoder(encoderConfig)
 	}
-	
+
 	// Create core
 	core := zapcore.NewCore(
 		encoder,
-		zapcore.AddSync(zapcore.Lock(zapcore.AddSync(zapcore.Lock(zapcore.AddSync(nil)))))),
+		zapcore.AddSync(zapcore.Lock(os.Stdout)),
 		level,
 	)
-	
+
 	// Create logger
 	zapLogger := zap.New(core,
 		zap.AddCaller(),
 		zap.AddStacktrace(zapcore.ErrorLevel),
 	)
-	
+
 	return &Logger{Logger: zapLogger}, nil
 }
 
