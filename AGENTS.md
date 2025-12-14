@@ -88,6 +88,7 @@ cadastro-pessoas/
 ```
 
 **Navigation Tips**:
+
 - Use `cd internal/domain` for business logic
 - Use `cd internal/application` for use cases
 - Use `cd internal/infrastructure` for external dependencies
@@ -98,6 +99,7 @@ cadastro-pessoas/
 ### I. Clean Code Principles
 
 **Naming Conventions**:
+
 ```go
 // ✅ Good - descriptive, intention-revealing
 type UserRepository interface {
@@ -121,6 +123,7 @@ if attempts > 3 { // What is 3?
 ```
 
 **Function Size & Responsibility**:
+
 ```go
 // ✅ Good - single responsibility, < 20 lines
 func (s *UserService) CreateUser(ctx context.Context, email, password string) (*User, error) {
@@ -142,6 +145,7 @@ func (s *UserService) CreateUserAndSendEmailAndLogAndNotify(...) // Too much!
 ```
 
 **Error Handling**:
+
 ```go
 // ✅ Good - use errors.Wrap for context
 if err := db.Save(user); err != nil {
@@ -160,6 +164,7 @@ panic("something went wrong") // Never panic in business logic
 ```
 
 **DRY Principle**:
+
 ```go
 // ✅ Good - extracted common validation
 func validateEmailFormat(email string) error {
@@ -172,6 +177,7 @@ func validateEmailFormat(email string) error {
 ### II. Clean Architecture in Go
 
 **Dependency Rule** (dependencies point inward):
+
 ```go
 // ✅ Good - domain doesn't import anything
 package entities
@@ -211,6 +217,7 @@ import "github.com/lib/pq" // NEVER import concrete implementations in domain!
 ```
 
 **Use Cases (Application Layer)**:
+
 ```go
 // ✅ Good - use case with injected dependencies
 type CreateUserUseCase struct {
@@ -239,6 +246,7 @@ func (uc *CreateUserUseCase) Execute(ctx context.Context, email, password string
 ### III. Code Reusability & DRY
 
 **Utility Packages**:
+
 ```go
 // Create reusable packages in pkg/
 // pkg/validator/email.go
@@ -262,6 +270,7 @@ type PasswordHasher interface {
 ```
 
 **Composition Over Inheritance** (Go uses composition naturally):
+
 ```go
 // ✅ Good - composition with embedded structs
 type BaseRepository struct {
@@ -283,6 +292,7 @@ type Logger interface {
 ### IV. Design Patterns in Go
 
 **Repository Pattern**:
+
 ```go
 // Domain layer - interface
 type UserRepository interface {
@@ -304,6 +314,7 @@ func NewPostgresUserRepository(db *sql.DB) UserRepository {
 ```
 
 **Factory Pattern**:
+
 ```go
 type Database interface {
     Connect() error
@@ -323,6 +334,7 @@ func NewDatabase(config *Config) (Database, error) {
 ```
 
 **Dependency Injection** (constructor injection):
+
 ```go
 // ✅ Good - dependencies injected via constructor
 type UserHandler struct {
@@ -345,6 +357,7 @@ func NewUserHandler() *UserHandler {
 ```
 
 **Strategy Pattern**:
+
 ```go
 type AuthStrategy interface {
     Authenticate(ctx context.Context, credentials Credentials) (*User, error)
@@ -360,6 +373,7 @@ type JWTAuth struct{}
 ### V. Function & Method Cohesion
 
 **Single Responsibility**:
+
 ```go
 // ✅ Good - each function does one thing
 func (s *UserService) ValidateUser(user *User) error {
@@ -381,6 +395,7 @@ func (s *UserService) ValidateHashAndSave(ctx context.Context, user *User) error
 ```
 
 **Minimal Parameters** (≤3 parameters, use structs for more):
+
 ```go
 // ✅ Good - using struct for multiple parameters
 type CreateUserRequest struct {
@@ -402,6 +417,7 @@ func CreateUser(ctx context.Context, email, password, firstName, lastName string
 ```
 
 **Pure Functions Preferred**:
+
 ```go
 // ✅ Good - pure function (same input → same output, no side effects)
 func CalculateAge(birthDate time.Time) int {
@@ -417,6 +433,7 @@ func (r *UserRepository) Save(ctx context.Context, user *User) error {
 ### VI. Performance Standards
 
 **Context Usage**:
+
 ```go
 // ✅ Always pass context as first parameter
 func (s *Service) FetchData(ctx context.Context, id string) (*Data, error) {
@@ -429,6 +446,7 @@ defer cancel()
 ```
 
 **Database Optimization**:
+
 ```go
 // ✅ Good - use prepared statements
 stmt, err := db.PrepareContext(ctx, "SELECT * FROM users WHERE email = $1")
@@ -451,6 +469,7 @@ users, _ := repo.FindByIDs(ctx, userIDs)
 ```
 
 **Concurrency** (use goroutines wisely):
+
 ```go
 // ✅ Good - parallel processing with sync.WaitGroup
 var wg sync.WaitGroup
@@ -475,6 +494,7 @@ semaphore := make(chan struct{}, maxWorkers)
 ```
 
 **Memory Management**:
+
 ```go
 // ✅ Good - close resources
 defer file.Close()
@@ -494,6 +514,7 @@ defer cancel() // Always defer cancel!
 ```
 
 **Caching**:
+
 ```go
 // ✅ Use caching for expensive operations
 type CachedUserRepository struct {
@@ -517,6 +538,7 @@ func (r *CachedUserRepository) FindByID(ctx context.Context, id string) (*User, 
 ### VII. Security Requirements
 
 **Input Validation**:
+
 ```go
 // ✅ Good - validate all inputs
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
@@ -551,6 +573,7 @@ func isValidRole(role string) bool {
 ```
 
 **SQL Injection Prevention**:
+
 ```go
 // ✅ Good - parameterized queries
 query := "SELECT * FROM users WHERE email = $1 AND active = $2"
@@ -561,6 +584,7 @@ query := fmt.Sprintf("SELECT * FROM users WHERE email = '%s'", email) // VULNERA
 ```
 
 **Password Handling**:
+
 ```go
 // ✅ Good - use bcrypt or argon2
 import "golang.org/x/crypto/bcrypt"
@@ -579,6 +603,7 @@ user.Password = password // NEVER!
 ```
 
 **Secret Management**:
+
 ```go
 // ✅ Good - use environment variables
 import "os"
@@ -597,6 +622,7 @@ const apiKey = "sk_live_123456789" // NEVER!
 ```
 
 **Secure Error Handling**:
+
 ```go
 // ✅ Good - generic error to user, detailed log internally
 func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
@@ -614,6 +640,7 @@ http.Error(w, err.Error(), 500) // Might expose database structure!
 ```
 
 **HTTPS & TLS**:
+
 ```go
 // ✅ Good - enforce HTTPS
 func main() {
@@ -630,6 +657,7 @@ func main() {
 ```
 
 **Rate Limiting**:
+
 ```go
 // ✅ Implement rate limiting middleware
 import "golang.org/x/time/rate"
@@ -650,6 +678,7 @@ func RateLimitMiddleware(limiter *rate.Limiter) func(http.Handler) http.Handler 
 ## Testing Instructions
 
 ### Test Structure
+
 ```bash
 # Run all tests
 go test ./...
@@ -666,6 +695,7 @@ go tool cover -html=coverage.out
 ```
 
 ### Test Naming Convention
+
 ```go
 // Format: Test<FunctionName>_<Scenario>_<ExpectedResult>
 func TestCreateUser_ValidInput_ReturnsUser(t *testing.T) {}
@@ -674,6 +704,7 @@ func TestCreateUser_DuplicateEmail_ReturnsError(t *testing.T) {}
 ```
 
 ### TDD Workflow (MANDATORY)
+
 1. **Write test first** - test should FAIL initially
 2. **Run test** - verify it fails for the right reason
 3. **Write minimal code** to make test pass
@@ -681,6 +712,7 @@ func TestCreateUser_DuplicateEmail_ReturnsError(t *testing.T) {}
 5. **Repeat**
 
 ### Test Examples
+
 ```go
 // Unit test example
 func TestCreateUser_ValidInput_ReturnsUser(t *testing.T) {
@@ -722,6 +754,7 @@ func TestValidateEmail(t *testing.T) {
 ```
 
 ### Integration Tests
+
 ```go
 // Use testcontainers for real database
 func TestUserRepository_Integration(t *testing.T) {
@@ -760,9 +793,11 @@ docker run -p 8080:8080 cadastro-pessoas:latest
 ## Dependencies
 
 ### Required Go Version
+
 - Go 1.21+
 
 ### Core Dependencies
+
 ```go
 // Framework & HTTP
 github.com/gorilla/mux          // HTTP router
@@ -795,7 +830,9 @@ github.com/golang-jwt/jwt       // JWT tokens
 ## Git Workflow
 
 ### Commit Messages
+
 Follow conventional commits:
+
 ```
 feat: add user creation endpoint
 fix: resolve nil pointer in user service
@@ -807,6 +844,7 @@ security: add rate limiting middleware
 ```
 
 ### Pre-commit Checklist
+
 - [ ] Code formatted with `gofmt` or `goimports`
 - [ ] All tests pass (`go test ./...`)
 - [ ] Test coverage ≥ 80%
@@ -817,6 +855,7 @@ security: add rate limiting middleware
 - [ ] Proper error handling
 
 ### Pull Request Template
+
 ```markdown
 ## Description
 [Describe what this PR does]
@@ -917,18 +956,21 @@ export RATE_LIMIT_WINDOW=60
 ### Common Issues
 
 **Import cycle**:
+
 ```bash
 # Check for circular dependencies
 go mod graph | grep <package>
 ```
 
 **Race conditions**:
+
 ```bash
 # Always run with race detector during development
 go test -race ./...
 ```
 
 **Memory leaks**:
+
 ```bash
 # Profile memory usage
 go test -memprofile=mem.prof -bench=.
@@ -940,7 +982,7 @@ go tool pprof mem.prof
 - Constitution: `.specify/memory/constitution.md`
 - API Documentation: `docs/api.md`
 - Architecture Decisions: `docs/adr/`
-- Spec Kit Documentation: https://github.com/github/spec-kit
+- Spec Kit Documentation: <https://github.com/github/spec-kit>
 
 ## Questions or Issues?
 
