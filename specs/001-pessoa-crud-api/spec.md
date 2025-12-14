@@ -105,9 +105,9 @@ As a system user, I need to remove a person's record from the system including a
 - What happens when email or phone format is invalid? (System should validate and reject with clear error messages)
 - What happens when birthdate is in the future? (System should validate and reject with clear error message)
 - What happens when birthdate indicates age > 150 years? (System should validate and reject with clear error message)
-- What happens when name or surname contains special characters or numbers? (System should validate according to reasonable naming rules)
+- What happens when name or surname contains special characters or numbers? (System should validate according to reasonable naming rules: allow Unicode letters, spaces, hyphens, and apostrophes; reject numbers and other special characters)
 - What happens when an update request is submitted with no changes? (System should process successfully and return unchanged data)
-- What happens when concurrent update requests are made for the same person? (System should handle with appropriate concurrency control)
+- What happens when concurrent update requests are made for the same person? (System should handle with appropriate concurrency control using optimistic locking via updated_at timestamp - see data-model.md for implementation details)
 - What happens when request payload exceeds reasonable size limits? (System should reject with payload size error)
 
 ## Requirements *(mandatory)*
@@ -115,7 +115,7 @@ As a system user, I need to remove a person's record from the system including a
 ### Functional Requirements
 
 - **FR-001**: System MUST provide a REST API endpoint to create a new person record with required fields: name, surname, sex, and birthdate
-- **FR-002**: System MUST validate that sex field accepts only "masculino" or "feminino" values
+- **FR-002**: System MUST validate that sex field accepts only "masculino" or "feminino" values (exact lowercase match required)
 - **FR-003**: System MUST validate that birthdate is in a valid date format and represents a date in the past
 - **FR-004**: System MUST validate that birthdate does not indicate an age exceeding 150 years
 - **FR-005**: System MUST allow a person to have zero, one, or multiple addresses, each containing street, city, state, and country

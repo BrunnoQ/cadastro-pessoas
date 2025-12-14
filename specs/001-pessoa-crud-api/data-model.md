@@ -15,6 +15,7 @@ This document defines the data model for the Person Management system, including
 **Purpose**: Represents an individual person in the system with their basic information and associated addresses and contacts.
 
 **Go Struct**:
+
 ```go
 package entities
 
@@ -87,6 +88,7 @@ func (p *Person) Age() int {
 ```
 
 **MongoDB Document Example**:
+
 ```json
 {
   "_id": "507f1f77bcf86cd799439011",
@@ -177,6 +179,7 @@ func calculateAge(birthdate time.Time) int {
 ```
 
 **Business Rules**:
+
 - Person ID is immutable once created (never changes)
 - Person must always have at least name, surname, sex, and birthdate (required fields)
 - Addresses and contacts are optional (can be empty arrays)
@@ -190,6 +193,7 @@ func calculateAge(birthdate time.Time) int {
 **Purpose**: Represents a physical address associated with a person.
 
 **Go Struct**:
+
 ```go
 package entities
 
@@ -236,6 +240,7 @@ func (a Address) Validate() error {
 | `Country` | string | Yes | 2-100 characters | Country name |
 
 **Business Rules**:
+
 - Addresses have no independent identity (value object, not entity)
 - Addresses exist only as part of a Person
 - Multiple addresses allowed per person (e.g., home, work)
@@ -249,6 +254,7 @@ func (a Address) Validate() error {
 **Purpose**: Represents a contact method (phone and/or email) for a person.
 
 **Go Struct**:
+
 ```go
 package entities
 
@@ -299,14 +305,16 @@ func (c Contact) Validate() error {
 | Field | Type | Required | Validation Rules | Description |
 |-------|------|----------|------------------|-------------|
 | `Phone` | string | Conditional | E.164 format (+country+number), 8-16 chars | Phone number with country code |
-| `Email` | string | Conditional | RFC 5322 format (user@domain.tld) | Email address |
+| `Email` | string | Conditional | RFC 5322 format (<user@domain.tld>) | Email address |
 
 **Validation Rules**:
+
 - At least one of phone OR email must be provided (both can be provided)
 - Phone format: E.164 international format starting with + (e.g., +5511999999999)
 - Email format: RFC 5322 compliant (simplified regex for common cases)
 
 **Business Rules**:
+
 - Contacts have no independent identity (value object, not entity)
 - Contacts exist only as part of a Person
 - Multiple contacts allowed per person (e.g., mobile, home, work email)
@@ -325,6 +333,7 @@ func (c Contact) Validate() error {
 **Cascade**: Delete person → delete all addresses
 
 **Rationale for Embedding**:
+
 - Addresses always accessed with person (no independent queries)
 - Bounded collection (typically <10 addresses per person)
 - Atomic updates (modify entire person document)
@@ -337,6 +346,7 @@ func (c Contact) Validate() error {
 **Cascade**: Delete person → delete all contacts
 
 **Rationale for Embedding**:
+
 - Contacts always accessed with person (no independent queries)
 - Bounded collection (typically <10 contacts per person)
 - Atomic updates (modify entire person document)
@@ -348,6 +358,7 @@ func (c Contact) Validate() error {
 ### Collection: `persons`
 
 **Indexes**:
+
 ```javascript
 // Primary key (automatic)
 { "_id": 1 }  // Unique, clustered
@@ -360,11 +371,13 @@ func (c Contact) Validate() error {
 ```
 
 **Index Strategy Rationale**:
+
 - `_id` index: Automatic, provides O(1) lookup for get-by-ID queries (SC-002 <200ms target)
 - `created_at` index: Enables efficient sorting for list queries (SC-002 target)
 - No text indexes yet: No full-text search required in MVP
 
 **Validation Schema** (MongoDB validation):
+
 ```javascript
 db.createCollection("persons", {
   validator: {
@@ -567,7 +580,8 @@ func (r *MongoPersonRepository) Update(ctx context.Context, person *entities.Per
 }
 ```
 
-**Rationale**: 
+**Rationale**:
+
 - Prevents lost updates when two users modify same person concurrently
 - Fails fast with clear error message for user to retry
 
@@ -590,6 +604,7 @@ No schema migrations required (MongoDB is schemaless). Initial setup includes:
 3. Apply validation schema (optional, for safety)
 
 **Migration Script** (`internal/infrastructure/persistence/migrations/init_indexes.go`):
+
 ```go
 func InitializeIndexes(ctx context.Context, db *mongo.Database) error {
     collection := db.Collection("persons")
@@ -618,40 +633,48 @@ If schema changes in future (e.g., add new field):
 ### Query Patterns
 
 **Get Person by ID** (Most Common):
+
 ```javascript
 db.persons.findOne({ _id: ObjectId("...") })
 ```
+
 - Index: `_id` (automatic)
 - Performance: O(1) lookup
 - Expected: <10ms database time
 
 **List Persons with Pagination**:
+
 ```javascript
 db.persons.find()
   .sort({ created_at: -1 })
   .skip(page * pageSize)
   .limit(pageSize)
 ```
+
 - Index: `created_at`
 - Performance: O(log n) for index scan + O(pageSize) for document retrieval
 - Expected: <50ms for 20 records
 
 **Count Total Records**:
+
 ```javascript
 db.persons.countDocuments()
 ```
+
 - Performance: O(1) if collection size cached, O(n) if precise count needed
 - Optimization: Use estimated count for large collections
 
 ### Document Size Estimation
 
 **Average Document Size**:
+
 - Person base: ~200 bytes
 - 3 addresses: ~300 bytes (100 bytes each)
 - 3 contacts: ~150 bytes (50 bytes each)
 - **Total: ~650 bytes per document**
 
 **Collection Size Projection**:
+
 - 10,000 persons: ~6.5 MB
 - 100,000 persons: ~65 MB
 - 1,000,000 persons: ~650 MB

@@ -16,6 +16,7 @@ Before you begin, ensure you have the following installed:
 - **curl** or **Postman**: For testing API endpoints
 
 Verify installations:
+
 ```bash
 go version        # Should show 1.21+
 docker --version  # Should show 20.10+
@@ -57,6 +58,7 @@ docker compose ps
 MongoDB will be available at `mongodb://localhost:27017`
 
 **Alternative - Manual Docker**:
+
 ```bash
 docker run -d \
   --name cadastro-pessoas-mongo \
@@ -70,6 +72,7 @@ docker run -d \
 The application uses YAML configuration files in the `configs/` directory.
 
 **For Local Development** (configs/config.local.yaml):
+
 ```yaml
 server:
   port: 8080
@@ -97,6 +100,7 @@ validation:
 ```
 
 **Set Environment Variable**:
+
 ```bash
 # Linux/Mac
 export APP_ENV=local
@@ -111,6 +115,7 @@ set APP_ENV=local
 ### 5. Run Application
 
 **Option A: Using Make** (recommended):
+
 ```bash
 # Run with hot reload
 make run
@@ -121,6 +126,7 @@ make build
 ```
 
 **Option B: Direct Go Command**:
+
 ```bash
 # Run directly
 go run ./cmd/api
@@ -131,6 +137,7 @@ go build -o bin/cadastro-pessoas ./cmd/api
 ```
 
 **Option C: Using Docker** (full containerization):
+
 ```bash
 # Build and run everything (app + MongoDB)
 docker compose up --build
@@ -370,6 +377,7 @@ goimports -w .
 ### 3. Database Management
 
 **View MongoDB Collections**:
+
 ```bash
 # Connect to MongoDB container
 docker exec -it cadastro-pessoas-mongo mongosh
@@ -381,6 +389,7 @@ db.persons.countDocuments()
 ```
 
 **Reset Database**:
+
 ```bash
 # Drop database and start fresh
 docker exec -it cadastro-pessoas-mongo mongosh cadastro_pessoas_local --eval "db.dropDatabase()"
@@ -389,6 +398,7 @@ docker exec -it cadastro-pessoas-mongo mongosh cadastro_pessoas_local --eval "db
 ### 4. View Logs
 
 **Application Logs**:
+
 ```bash
 # If running with Docker Compose
 docker compose logs -f api
@@ -398,6 +408,7 @@ docker compose logs -f mongodb
 ```
 
 **Log Format** (JSON structured logging):
+
 ```json
 {
   "level": "info",
@@ -415,6 +426,7 @@ docker compose logs -f mongodb
 ### Interactive Documentation
 
 **Option 1: Swagger UI** (recommended):
+
 ```bash
 # Install Swagger UI locally
 docker run -p 8081:8080 \
@@ -426,6 +438,7 @@ docker run -p 8081:8080 \
 ```
 
 **Option 2: Redoc**:
+
 ```bash
 docker run -p 8082:80 \
   -e SPEC_URL=/specs/openapi.yaml \
@@ -438,11 +451,13 @@ docker run -p 8082:80 \
 ### OpenAPI Specification
 
 OpenAPI 3.0 specification available at:
+
 ```
 specs/001-pessoa-crud-api/contracts/openapi.yaml
 ```
 
 **Generate Client Libraries**:
+
 ```bash
 # Install OpenAPI Generator
 npm install -g @openapitools/openapi-generator-cli
@@ -487,6 +502,7 @@ openapi-generator-cli generate \
 - Connection Pool: Larger (min: 10, max: 200)
 
 **Switch Environments**:
+
 ```bash
 # Set environment variable
 export APP_ENV=beta  # or prod
@@ -584,6 +600,7 @@ docker info
 ### Application Won't Start
 
 Check:
+
 1. Is MongoDB running? `docker ps`
 2. Is port 8080 available? `lsof -i :8080`
 3. Is config file present? `ls configs/config.local.yaml`
@@ -624,9 +641,9 @@ View application logs for specific error message.
 
 - **Constitution**: `.specify/memory/constitution.md` - Coding principles
 - **AGENTS.md**: `AGENTS.md` - Operational guidelines for Go development
-- **Gin Framework**: https://gin-gonic.com/docs/
-- **MongoDB Go Driver**: https://www.mongodb.com/docs/drivers/go/current/
-- **Go Testing**: https://go.dev/doc/tutorial/add-a-test
+- **Gin Framework**: <https://gin-gonic.com/docs/>
+- **MongoDB Go Driver**: <https://www.mongodb.com/docs/drivers/go/current/>
+- **Go Testing**: <https://go.dev/doc/tutorial/add-a-test>
 
 ## Questions?
 

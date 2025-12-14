@@ -12,7 +12,8 @@ Build a REST API for managing person records (CRUD operations) with nested addre
 ## Technical Context
 
 **Language/Version**: Go 1.21+  
-**Primary Dependencies**: 
+**Primary Dependencies**:
+
 - gin-gonic/gin v1.9+ (HTTP framework)
 - mongodb/mongo-go-driver v1.13+ (MongoDB client)
 - go-playground/validator/v10 (input validation)
@@ -23,18 +24,21 @@ Build a REST API for managing person records (CRUD operations) with nested addre
 **Testing**: Go standard testing package + testify/assert for assertions, testcontainers-go for integration tests  
 **Target Platform**: Linux containers (Docker), deployable to LOCAL/BETA/PROD environments  
 **Project Type**: Single backend service (REST API server)  
-**Performance Goals**: 
+**Performance Goals**:
+
 - P95 latency: <500ms for write operations (create, update, delete)
 - P95 latency: <200ms for read operations (get by ID, list)
 - Throughput: 100+ concurrent requests without degradation
 
-**Constraints**: 
+**Constraints**:
+
 - Response time: <500ms P95 for creates, <200ms P95 for reads
 - Pagination: Max 100 records per page, default 20
 - Validation: RFC 5322 email, international phone formats
 - Age limit: Max 150 years from birthdate
 
-**Scale/Scope**: 
+**Scale/Scope**:
+
 - Initial MVP: P1 user stories (Create + Query by ID)
 - Phase 2: P2 user stories (List with pagination + Update)
 - Phase 3: P3 user story (Delete with cascade)
