@@ -1,0 +1,721 @@
+openapi: 3.0.3
+info:
+  title: Person Management API
+  description: |
+    REST API for managing person records with addresses and contacts.
+    
+    This API provides CRUD operations for person management, supporting:
+    - Create new persons with nested addresses and contacts
+    - Retrieve person details by unique identifier
+    - List all persons with pagination
+    - Update existing person information
+    - Delete persons with cascade to related data
+    
+    All endpoints follow RESTful conventions and return JSON responses.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development server
+  - url: https://beta.example.com/api/v1
+    description: Beta environment
+  - url: https://api.example.com/api/v1
+    description: Production environment
+
+tags:
+  - name: persons
+    description: Person management operations
+  - name: health
+    description: Health check endpoints
+
+paths:
+  /persons:
+    post:
+      tags:
+        - persons
+      summary: Create a new person
+      description: |
+        Creates a new person record with basic information (name, surname, sex, birthdate)
+        and optionally associated addresses and contacts. Returns the created person with
+        generated unique identifier.
+      operationId: createPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePersonRequest'
+            examples:
+              minimal:
+                summary: Minimal person (required fields only)
+                value:
+                  name: João
+                  surname: Silva
+                  sex: masculino
+                  birthdate: "1990-01-15"
+              complete:
+                summary: Complete person with address and contact
+                value:
+                  name: Maria
+                  surname: Santos
+                  sex: feminino
+                  birthdate: "1985-05-20"
+                  addresses:
+                    - street: Avenida Paulista, 1000
+                      city: São Paulo
+                      state: SP
+                      country: Brasil
+                  contacts:
+                    - phone: "+5511987654321"
+                      email: maria.santos@example.com
+      responses:
+        '201':
+          description: Person created successfully
+          headers:
+            Location:
+              description: URI of the created person resource
+              schema:
+                type: string
+                example: /api/v1/persons/507f1f77bcf86cd799439011
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation:
+                  summary: Validation errors
+                  value:
+                    error:
+                      code: VALIDATION_ERROR
+                      message: Invalid input data
+                      details:
+                        - field: sex
+                          message: must be one of [masculino feminino]
+                        - field: birthdate
+                          message: must be in the past
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - persons
+      summary: List all persons
+      description: |
+        Retrieves a paginated list of all persons in the system. Each person in the
+        list includes basic information and counts of associated addresses and contacts,
+        but not the full nested data. Use the get-by-ID endpoint to retrieve complete
+        person details.
+      operationId: listPersons
+      parameters:
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: pageSize
+          in: query
+          description: Number of records per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Successful response with paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPersonsResponse'
+              examples:
+                success:
+                  summary: Paginated list with 2 persons
+                  value:
+                    data:
+                      - id: "507f1f77bcf86cd799439011"
+                        name: João
+                        surname: Silva
+                        sex: masculino
+                        birthdate: "1990-01-15"
+                        address_count: 1
+                        contact_count: 2
+                      - id: "507f1f77bcf86cd799439012"
+                        name: Maria
+                        surname: Santos
+                        sex: feminino
+                        birthdate: "1985-05-20"
+                        address_count: 2
+                        contact_count: 1
+                    pagination:
+                      page: 1
+                      page_size: 20
+                      total_records: 2
+                      total_pages: 1
+                empty:
+                  summary: Empty list (no persons)
+                  value:
+                    data: []
+                    pagination:
+                      page: 1
+                      page_size: 20
+                      total_records: 0
+                      total_pages: 0
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /persons/{id}:
+    get:
+      tags:
+        - persons
+      summary: Get person by ID
+      description: |
+        Retrieves complete information for a specific person identified by their unique
+        identifier, including all associated addresses and contacts.
+      operationId: getPersonById
+      parameters:
+        - name: id
+          in: path
+          description: Person unique identifier (MongoDB ObjectID)
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+            example: "507f1f77bcf86cd799439011"
+      responses:
+        '200':
+          description: Person found and returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_id:
+                  summary: Invalid ObjectID format
+                  value:
+                    error:
+                      code: INVALID_ID
+                      message: Invalid person ID format
+                      details: []
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                not_found:
+                  summary: Person does not exist
+                  value:
+                    error:
+                      code: NOT_FOUND
+                      message: Person not found
+                      details: []
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - persons
+      summary: Update person
+      description: |
+        Updates an existing person's information. This is a full update (PUT semantics),
+        so all required fields must be provided. Addresses and contacts can be added,
+        removed, or modified. The operation is atomic - all changes succeed or fail together.
+      operationId: updatePerson
+      parameters:
+        - name: id
+          in: path
+          description: Person unique identifier
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePersonRequest'
+            examples:
+              update_basic:
+                summary: Update basic information
+                value:
+                  name: João
+                  surname: Silva Santos
+                  sex: masculino
+                  birthdate: "1990-01-15"
+              update_with_addresses:
+                summary: Update with new addresses
+                value:
+                  name: João
+                  surname: Silva
+                  sex: masculino
+                  birthdate: "1990-01-15"
+                  addresses:
+                    - street: Nova Rua, 456
+                      city: Rio de Janeiro
+                      state: RJ
+                      country: Brasil
+                  contacts:
+                    - phone: "+5521987654321"
+                      email: joao.silva@newdomain.com
+      responses:
+        '200':
+          description: Person updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonResponse'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Person not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict due to concurrent update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                concurrent_update:
+                  summary: Concurrent modification detected
+                  value:
+                    error:
+                      code: CONCURRENT_UPDATE
+                      message: Person was modified by another request
+                      details: []
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - persons
+      summary: Delete person
+      description: |
+        Permanently deletes a person and all associated addresses and contacts. This
+        operation cannot be undone. Returns success if person was deleted or if person
+        didn't exist (idempotent).
+      operationId: deletePerson
+      parameters:
+        - name: id
+          in: path
+          description: Person unique identifier
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9a-fA-F]{24}$'
+      responses:
+        '200':
+          description: Person deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Person deleted successfully
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      tags:
+        - health
+      summary: Health check
+      description: Returns service health status and version information
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: healthy
+                  version:
+                    type: string
+                    example: 1.0.0
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-12-14T10:30:00Z"
+                  dependencies:
+                    type: object
+                    properties:
+                      database:
+                        type: string
+                        example: connected
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: unhealthy
+                  error:
+                    type: string
+                    example: Database connection failed
+
+components:
+  schemas:
+    CreatePersonRequest:
+      type: object
+      required:
+        - name
+        - surname
+        - sex
+        - birthdate
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Person's first name
+          example: João
+        surname:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Person's last name
+          example: Silva
+        sex:
+          type: string
+          enum:
+            - masculino
+            - feminino
+          description: Biological sex
+          example: masculino
+        birthdate:
+          type: string
+          format: date
+          description: Date of birth (ISO 8601 format, must be in the past, age ≤150 years)
+          example: "1990-01-15"
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressRequest'
+          description: Optional list of addresses
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactRequest'
+          description: Optional list of contacts
+
+    UpdatePersonRequest:
+      type: object
+      required:
+        - name
+        - surname
+        - sex
+        - birthdate
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: João
+        surname:
+          type: string
+          minLength: 2
+          maxLength: 100
+          example: Silva
+        sex:
+          type: string
+          enum:
+            - masculino
+            - feminino
+          example: masculino
+        birthdate:
+          type: string
+          format: date
+          example: "1990-01-15"
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressRequest'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactRequest'
+
+    AddressRequest:
+      type: object
+      required:
+        - street
+        - city
+        - state
+        - country
+      properties:
+        street:
+          type: string
+          minLength: 2
+          maxLength: 200
+          description: Street address including number
+          example: Rua das Flores, 123
+        city:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: City name
+          example: São Paulo
+        state:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: State/province name
+          example: SP
+        country:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Country name
+          example: Brasil
+
+    ContactRequest:
+      type: object
+      properties:
+        phone:
+          type: string
+          pattern: '^\+[1-9]\d{1,14}$'
+          description: Phone number in E.164 format (international with country code)
+          example: "+5511999999999"
+        email:
+          type: string
+          format: email
+          description: Email address (RFC 5322 format)
+          example: joao.silva@example.com
+      description: Must have at least one of phone or email
+
+    PersonResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique person identifier (MongoDB ObjectID)
+          example: "507f1f77bcf86cd799439011"
+        name:
+          type: string
+          example: João
+        surname:
+          type: string
+          example: Silva
+        sex:
+          type: string
+          enum:
+            - masculino
+            - feminino
+          example: masculino
+        birthdate:
+          type: string
+          format: date
+          example: "1990-01-15"
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressResponse'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContactResponse'
+        created_at:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2025-12-14T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Record last update timestamp
+          example: "2025-12-14T10:30:00Z"
+
+    AddressResponse:
+      type: object
+      properties:
+        street:
+          type: string
+          example: Rua das Flores, 123
+        city:
+          type: string
+          example: São Paulo
+        state:
+          type: string
+          example: SP
+        country:
+          type: string
+          example: Brasil
+
+    ContactResponse:
+      type: object
+      properties:
+        phone:
+          type: string
+          example: "+5511999999999"
+        email:
+          type: string
+          example: joao.silva@example.com
+
+    ListPersonsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonSummary'
+        pagination:
+          $ref: '#/components/schemas/PaginationResponse'
+
+    PersonSummary:
+      type: object
+      description: Abbreviated person info for list view (without full nested data)
+      properties:
+        id:
+          type: string
+          example: "507f1f77bcf86cd799439011"
+        name:
+          type: string
+          example: João
+        surname:
+          type: string
+          example: Silva
+        sex:
+          type: string
+          enum:
+            - masculino
+            - feminino
+          example: masculino
+        birthdate:
+          type: string
+          format: date
+          example: "1990-01-15"
+        address_count:
+          type: integer
+          description: Number of associated addresses
+          example: 2
+        contact_count:
+          type: integer
+          description: Number of associated contacts
+          example: 1
+
+    PaginationResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number (1-indexed)
+          example: 1
+        page_size:
+          type: integer
+          description: Number of records per page
+          example: 20
+        total_records:
+          type: integer
+          description: Total number of records across all pages
+          example: 145
+        total_pages:
+          type: integer
+          description: Total number of pages
+          example: 8
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+              enum:
+                - VALIDATION_ERROR
+                - INVALID_ID
+                - NOT_FOUND
+                - CONCURRENT_UPDATE
+                - INTERNAL_ERROR
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              description: Human-readable error message
+              example: Invalid input data
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                    description: Field name that caused the error
+                    example: email
+                  message:
+                    type: string
+                    description: Specific error message for this field
+                    example: must be valid email format
+              description: Optional array of field-specific error details
