@@ -1,0 +1,62 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Documentation
+README.md
+CONTRIBUTING.md
+docs/
+specs/
+.specify/
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Go
+bin/
+vendor/
+*.test
+*.out
+go.work
+
+# Tests
+tests/
+*_test.go
+coverage.out
+.coverage
+
+# Configuration examples (keep actual configs)
+*.example
+*.sample
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env*
+!.env.example
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+!Dockerfile
+.dockerignore

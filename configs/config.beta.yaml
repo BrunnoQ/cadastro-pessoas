@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  mode: release
+  read_timeout: 15s
+  write_timeout: 15s
+  idle_timeout: 60s
+
+mongodb:
+  uri: mongodb://admin:CHANGE_ME@mongodb-beta:27017
+  database: cadastro_pessoas_beta
+  timeout: 10s
+  min_pool_size: 10
+  max_pool_size: 100
+  max_conn_idle_time: 30m
+
+logging:
+  level: info
+  format: json
+
+app:
+  name: cadastro-pessoas
+  version: 1.0.0
+  environment: beta

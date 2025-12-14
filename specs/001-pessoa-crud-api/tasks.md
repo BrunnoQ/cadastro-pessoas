@@ -46,18 +46,18 @@ Based on Clean Architecture single-project structure (Go):
 
 **Estimated Time**: 1-2 hours
 
-- [ ] T001 Initialize Go module with `go mod init github.com/BrunnoQ/cadastro-pessoas`
-- [ ] T002 Create directory structure per plan.md (cmd/, internal/, pkg/, tests/, configs/, docker/)
-- [ ] T003 [P] Create .gitignore for Go project (bin/, vendor/, *.log, configs/*.yaml except examples)
-- [ ] T004 [P] Create go.mod with required dependencies (Gin v1.9+, MongoDB driver v1.13+, Viper, Zap, Validator)
-- [ ] T005 [P] Create Makefile with commands (build, run, test, lint, docker-up, docker-down)
-- [ ] T006 [P] Create docker-compose.yml with MongoDB 6.0 service configuration
-- [ ] T007 [P] Create Dockerfile with multi-stage build (builder + scratch base)
-- [ ] T008 [P] Create README.md with project overview and setup instructions
-- [ ] T009 [P] Setup golangci-lint configuration (.golangci.yml)
-- [ ] T010 [P] Create .air.toml for hot reload configuration
+- [X] T001 Initialize Go module with `go mod init github.com/BrunnoQ/cadastro-pessoas`
+- [X] T002 Create directory structure per plan.md (cmd/, internal/, pkg/, tests/, configs/, docker/)
+- [X] T003 [P] Create .gitignore for Go project (bin/, vendor/, *.log, configs/*.yaml except examples)
+- [X] T004 [P] Create go.mod with required dependencies (Gin v1.9+, MongoDB driver v1.13+, Viper, Zap, Validator)
+- [X] T005 [P] Create Makefile with commands (build, run, test, lint, docker-up, docker-down)
+- [X] T006 [P] Create docker-compose.yml with MongoDB 6.0 service configuration
+- [X] T007 [P] Create Dockerfile with multi-stage build (builder + scratch base)
+- [X] T008 [P] Create README.md with project overview and setup instructions
+- [X] T009 [P] Setup golangci-lint configuration (.golangci.yml)
+- [X] T010 [P] Create .air.toml for hot reload configuration
 
-**Checkpoint**: Project structure created, dependencies defined
+**Checkpoint**: ✅ Project structure created, dependencies defined
 
 ---
 

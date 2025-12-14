@@ -1,0 +1,23 @@
+server:
+  port: 8080
+  mode: debug
+  read_timeout: 15s
+  write_timeout: 15s
+  idle_timeout: 60s
+
+mongodb:
+  uri: mongodb://admin:admin123@localhost:27017
+  database: cadastro_pessoas
+  timeout: 10s
+  min_pool_size: 5
+  max_pool_size: 100
+  max_conn_idle_time: 30m
+
+logging:
+  level: debug
+  format: console
+
+app:
+  name: cadastro-pessoas
+  version: 1.0.0
+  environment: local

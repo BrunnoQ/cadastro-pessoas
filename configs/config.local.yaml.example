@@ -1,0 +1,26 @@
+# Configuration Template
+# Copy this file to config.local.yaml and update with your settings
+
+server:
+  port: 8080                    # HTTP server port
+  mode: debug                   # debug or release
+  read_timeout: 15s             # Request read timeout
+  write_timeout: 15s            # Response write timeout
+  idle_timeout: 60s             # Keep-alive idle timeout
+
+mongodb:
+  uri: mongodb://admin:admin123@localhost:27017  # MongoDB connection string
+  database: cadastro_pessoas                      # Database name
+  timeout: 10s                                    # Operation timeout
+  min_pool_size: 5                                # Minimum connection pool size
+  max_pool_size: 100                              # Maximum connection pool size
+  max_conn_idle_time: 30m                         # Max idle time for connections
+
+logging:
+  level: debug                  # debug, info, warn, error
+  format: console               # json or console
+
+app:
+  name: cadastro-pessoas
+  version: 1.0.0
+  environment: local            # local, beta, prod
