@@ -13,6 +13,8 @@ Este projeto segue rigorosamente a **Constitution** definida em `.specify/memory
 3. **Code Reusability & DRY** - Máximo reaproveitamento através de abstração
 4. **Design Patterns** - Uso apropriado de padrões de projeto
 5. **Function & Method Cohesion** - Funções coesas com responsabilidade única
+6. **Performance Standards** - Performance por design, otimização de algoritmos e recursos
+7. **Security Requirements** - Segurança em todas as camadas (NON-NEGOTIABLE)
 
 ## 🚀 Começando
 
@@ -65,6 +67,8 @@ Todo código deve passar por:
 - ✅ Formatação automática
 - ✅ Testes unitários (mín. 80% cobertura)
 - ✅ Testes de integração
+- ✅ Validação de segurança (input validation, sem secrets)
+- ✅ Testes de performance (sem regressões)
 - ✅ Code review
 - ✅ Verificação contra Constitution
 

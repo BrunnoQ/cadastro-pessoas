@@ -38,6 +38,8 @@ Verify compliance with constitution principles:
 - [ ] **Code Reusability**: Common logic extracted, no duplication, composition over inheritance
 - [ ] **Design Patterns**: Appropriate patterns applied (Repository, Factory, Strategy, etc.)
 - [ ] **Function Cohesion**: Functions are small, focused, single-purpose with minimal parameters
+- [ ] **Performance Standards**: Performance requirements defined, algorithms efficient, caching strategy, resource management
+- [ ] **Security Requirements**: Input validation, authentication/authorization, data encryption, injection prevention, no secrets in code
 - [ ] **Testability**: Business logic independent of frameworks and external dependencies
 - [ ] **Quality Gates**: Linting, formatting, test coverage (80%+), documentation
 

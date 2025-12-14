@@ -20,16 +20,16 @@ description: "Task list template for feature implementation"
 
 ## Path Conventions
 
-- **Single project (Clean Architecture)**: 
+- **Single project (Clean Architecture)**:
   - `src/domain/` - Entities and repository interfaces
   - `src/application/` - Use cases and services
   - `src/infrastructure/` - External dependencies (DB, APIs, config)
   - `src/presentation/` - Controllers, CLI, API handlers
   - `tests/` at repository root
-- **Web app**: 
+- **Web app**:
   - `backend/src/` - Backend with Clean Architecture layers
   - `frontend/src/` - Frontend with domain, application, infrastructure, presentation
-- **Mobile**: 
+- **Mobile**:
   - `api/src/` - API with Clean Architecture layers
   - `ios/` or `android/` - Platform-specific with Domain, Application, Infrastructure, Presentation
 - Paths shown below assume single project - adjust based on plan.md structure
@@ -77,6 +77,14 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] T007 Create base models/entities that all stories depend on
 - [ ] T008 Configure error handling and logging infrastructure
 - [ ] T009 Setup environment configuration management
+- [ ] T010 [P] Configure input validation framework (security)
+- [ ] T011 [P] Setup secret management (environment variables, vault integration)
+- [ ] T012 [P] Implement rate limiting middleware (security + performance)
+- [ ] T013 [P] Configure caching layer (Redis, in-memory, etc.) for performance
+- [ ] T014 [P] Setup database connection pooling and query optimization
+- [ ] T015 [P] Configure HTTPS/TLS and security headers
+- [ ] T016 [P] Setup performance monitoring and profiling tools
+- [ ] T017 [P] Implement security logging (audit trail, failed auth attempts)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -167,6 +175,26 @@ Examples of foundational tasks (adjust based on your project):
 - [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
 - [ ] TXXX Security hardening
 - [ ] TXXX Run quickstart.md validation
+
+### Security Hardening Tasks
+
+- [ ] TXXX [P] Security audit: Review all input validation points
+- [ ] TXXX [P] Scan dependencies for known vulnerabilities (CVE check)
+- [ ] TXXX [P] Verify no secrets committed to repository (git history scan)
+- [ ] TXXX [P] Review all error messages for information leakage
+- [ ] TXXX [P] Implement/verify CORS policies
+- [ ] TXXX [P] Add security headers (CSP, X-Frame-Options, etc.)
+- [ ] TXXX [P] Penetration testing or security review
+
+### Performance Optimization Tasks
+
+- [ ] TXXX [P] Profile application to identify bottlenecks
+- [ ] TXXX [P] Database query optimization (add indexes, eliminate N+1)
+- [ ] TXXX [P] Implement caching for expensive operations
+- [ ] TXXX [P] Load testing to validate performance requirements
+- [ ] TXXX [P] Memory profiling to detect leaks
+- [ ] TXXX [P] Optimize critical path response times
+- [ ] TXXX [P] Review and optimize resource cleanup (connections, files)
 
 ---
 

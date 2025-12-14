@@ -1,11 +1,16 @@
 <!--
 Sync Impact Report:
-- Version: 0.0.0 → 1.0.0
+- Version: 1.0.0 → 1.1.0
 - Ratification Date: 2025-12-14
-- Modified Principles: N/A (initial version)
-- Added Sections: All core principles established
+- Last Amendment: 2025-12-14
+- Modified Principles: None
+- Added Sections: VI. Performance Standards, VII. Security Requirements
 - Removed Sections: None
-- Templates Status: All templates compatible ✅
+- Templates Status: 
+  * plan-template.md: ✅ Updated with new constitution checks
+  * tasks-template.md: ✅ Updated with security and performance task examples
+  * spec-template.md: ✅ Compatible
+  * Other templates: ✅ Compatible
 - Follow-up TODOs: None
 -->
 
@@ -84,6 +89,76 @@ Functions and methods MUST exhibit high cohesion and low coupling:
 
 **Rationale**: Cohesive functions are easier to understand, test, reuse, and maintain. They reduce cognitive load and minimize the risk of bugs.
 
+### VI. Performance Standards
+
+System performance MUST be considered from design through implementation:
+
+- **Performance by Design**: Performance requirements MUST be defined in specifications and validated in plans
+- **Algorithmic Efficiency**: Choose appropriate data structures and algorithms (O(n log n) vs O(n²) matters)
+- **Database Optimization**: 
+  - Queries MUST use appropriate indexes
+  - N+1 query problems MUST be avoided
+  - Eager/lazy loading strategies MUST be explicit
+- **Resource Management**: 
+  - Close resources (files, connections, streams) properly using context managers or try-finally
+  - Avoid memory leaks through proper object lifecycle management
+- **Caching Strategy**: Implement caching for expensive operations (network calls, complex calculations, database queries)
+### Code Review Checklist
+
+Reviewers MUST verify:
+
+1. Adherence to all Core Principles (I-VII)
+2. No violations of Clean Code practices
+3. Proper layer separation (Clean Architecture)
+4. Appropriate use of design patterns
+5. Elimination of code duplication
+6. Function cohesion and naming quality
+7. Test coverage and quality
+8. Documentation completeness
+9. Performance considerations addressed
+10. Security requirements met (input validation, no secrets, proper error handling)
+Security MUST be built into every layer of the application:
+
+- **Input Validation**: 
+  - ALL user input MUST be validated and sanitized
+  - Use allowlists (whitelist), not denylists (blacklist)
+  - Validate data type, length, format, and range
+- **Authentication & Authorization**:
+  - Implement proper authentication mechanisms
+  - Enforce principle of least privilege
+  - Never store passwords in plain text (use bcrypt, Argon2, or similar)
+  - Use secure session management
+- **Data Protection**:
+  - Encrypt sensitive data at rest and in transit (TLS 1.2+)
+  - Never log sensitive information (passwords, tokens, PII)
+  - Implement data sanitization before logging or displaying
+- **Injection Prevention**:
+  - Use parameterized queries/prepared statements (NO string concatenation for SQL)
+  - Sanitize all data used in dynamic queries or commands
+  - Validate and escape output to prevent XSS
+- **Error Handling**:
+  - Never expose stack traces or internal error details to users
+  - Log errors securely with appropriate detail for debugging
+  - Return generic error messages to users
+- **Dependency Management**:
+  - Keep dependencies up-to-date
+  - Regularly scan for known vulnerabilities (CVEs)
+  - Remove unused dependencies
+- **Secret Management**:
+  - NEVER commit secrets, API keys, or credentials to version control
+  - Use environment variables or secret management services
+  - Rotate secrets regularly
+- **API Security**:
+  - Implement rate limiting to prevent abuse
+  - Use HTTPS for all communications
+  - Validate API tokens and implement proper CORS policies
+- **Security Testing**:
+  - Include security tests in test suite
+  - Perform regular security audits
+  - Follow OWASP Top 10 guidelines
+
+**Rationale**: Security breaches have severe consequences including data loss, legal liability, reputational damage, and financial loss. Security cannot be added as an afterthought—it must be fundamental.
+
 ## Code Quality Standards
 
 ### Mandatory Quality Gates
@@ -91,11 +166,11 @@ Functions and methods MUST exhibit high cohesion and low coupling:
 All code MUST pass these gates before merging:
 
 - **Linting**: Zero linting errors using project-configured linter
-- **Formatting**: Code MUST be auto-formatted with consistent style
-- **Unit Tests**: Minimum 80% code coverage for business logic
-- **Integration Tests**: All external integrations MUST have contract tests
-- **Code Review**: At least one peer review approval required
-- **Documentation**: Public APIs and complex algorithms MUST be documented
+- **MAJOR**: Backward-incompatible principle changes or removals
+- **MINOR**: New principles or material expansions to existing ones
+- **PATCH**: Clarifications, wording improvements, non-semantic refinements
+
+**Version**: 1.1.0 | **Ratified**: 2025-12-14 | **Last Amended**: 2025-12-14
 - **Performance**: No regression in performance benchmarks
 
 ### Code Review Checklist
