@@ -95,14 +95,15 @@ System performance MUST be considered from design through implementation:
 
 - **Performance by Design**: Performance requirements MUST be defined in specifications and validated in plans
 - **Algorithmic Efficiency**: Choose appropriate data structures and algorithms (O(n log n) vs O(n²) matters)
-- **Database Optimization**: 
+- **Database Optimization**:
   - Queries MUST use appropriate indexes
   - N+1 query problems MUST be avoided
   - Eager/lazy loading strategies MUST be explicit
-- **Resource Management**: 
+- **Resource Management**:
   - Close resources (files, connections, streams) properly using context managers or try-finally
   - Avoid memory leaks through proper object lifecycle management
 - **Caching Strategy**: Implement caching for expensive operations (network calls, complex calculations, database queries)
+
 ### Code Review Checklist
 
 Reviewers MUST verify:
@@ -119,7 +120,7 @@ Reviewers MUST verify:
 10. Security requirements met (input validation, no secrets, proper error handling)
 Security MUST be built into every layer of the application:
 
-- **Input Validation**: 
+- **Input Validation**:
   - ALL user input MUST be validated and sanitized
   - Use allowlists (whitelist), not denylists (blacklist)
   - Validate data type, length, format, and range
@@ -171,6 +172,7 @@ All code MUST pass these gates before merging:
 - **PATCH**: Clarifications, wording improvements, non-semantic refinements
 
 **Version**: 1.1.0 | **Ratified**: 2025-12-14 | **Last Amended**: 2025-12-14
+
 - **Performance**: No regression in performance benchmarks
 
 ### Code Review Checklist
