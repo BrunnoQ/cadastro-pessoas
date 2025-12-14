@@ -3,14 +3,14 @@ info:
   title: Person Management API
   description: |
     REST API for managing person records with addresses and contacts.
-    
+
     This API provides CRUD operations for person management, supporting:
     - Create new persons with nested addresses and contacts
     - Retrieve person details by unique identifier
     - List all persons with pagination
     - Update existing person information
     - Delete persons with cascade to related data
-    
+
     All endpoints follow RESTful conventions and return JSON responses.
   version: 1.0.0
   contact:
@@ -50,7 +50,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePersonRequest'
+              $ref: "#/components/schemas/CreatePersonRequest"
             examples:
               minimal:
                 summary: Minimal person (required fields only)
@@ -75,7 +75,7 @@ paths:
                     - phone: "+5511987654321"
                       email: maria.santos@example.com
       responses:
-        '201':
+        "201":
           description: Person created successfully
           headers:
             Location:
@@ -86,13 +86,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PersonResponse'
-        '400':
+                $ref: "#/components/schemas/PersonResponse"
+        "400":
           description: Invalid input data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 validation:
                   summary: Validation errors
@@ -105,12 +105,12 @@ paths:
                           message: must be one of [masculino feminino]
                         - field: birthdate
                           message: must be in the past
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     get:
       tags:
@@ -141,12 +141,12 @@ paths:
             maximum: 100
             default: 20
       responses:
-        '200':
+        "200":
           description: Successful response with paginated list
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPersonsResponse'
+                $ref: "#/components/schemas/ListPersonsResponse"
               examples:
                 success:
                   summary: Paginated list with 2 persons
@@ -180,18 +180,18 @@ paths:
                       page_size: 20
                       total_records: 0
                       total_pages: 0
-        '400':
+        "400":
           description: Invalid query parameters
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /persons/{id}:
     get:
@@ -209,21 +209,21 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[0-9a-fA-F]{24}$'
+            pattern: "^[0-9a-fA-F]{24}$"
             example: "507f1f77bcf86cd799439011"
       responses:
-        '200':
+        "200":
           description: Person found and returned
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PersonResponse'
-        '400':
+                $ref: "#/components/schemas/PersonResponse"
+        "400":
           description: Invalid ID format
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 invalid_id:
                   summary: Invalid ObjectID format
@@ -232,12 +232,12 @@ paths:
                       code: INVALID_ID
                       message: Invalid person ID format
                       details: []
-        '404':
+        "404":
           description: Person not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 not_found:
                   summary: Person does not exist
@@ -246,12 +246,12 @@ paths:
                       code: NOT_FOUND
                       message: Person not found
                       details: []
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     put:
       tags:
@@ -269,13 +269,13 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[0-9a-fA-F]{24}$'
+            pattern: "^[0-9a-fA-F]{24}$"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePersonRequest'
+              $ref: "#/components/schemas/UpdatePersonRequest"
             examples:
               update_basic:
                 summary: Update basic information
@@ -300,30 +300,30 @@ paths:
                     - phone: "+5521987654321"
                       email: joao.silva@newdomain.com
       responses:
-        '200':
+        "200":
           description: Person updated successfully
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PersonResponse'
-        '400':
+                $ref: "#/components/schemas/PersonResponse"
+        "400":
           description: Invalid input data
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '404':
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
           description: Person not found
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
           description: Conflict due to concurrent update
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 concurrent_update:
                   summary: Concurrent modification detected
@@ -332,12 +332,12 @@ paths:
                       code: CONCURRENT_UPDATE
                       message: Person was modified by another request
                       details: []
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
     delete:
       tags:
@@ -355,9 +355,9 @@ paths:
           required: true
           schema:
             type: string
-            pattern: '^[0-9a-fA-F]{24}$'
+            pattern: "^[0-9a-fA-F]{24}$"
       responses:
-        '200':
+        "200":
           description: Person deleted successfully
           content:
             application/json:
@@ -367,18 +367,18 @@ paths:
                   message:
                     type: string
                     example: Person deleted successfully
-        '400':
+        "400":
           description: Invalid ID format
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
 
   /health:
     get:
@@ -388,7 +388,7 @@ paths:
       description: Returns service health status and version information
       operationId: healthCheck
       responses:
-        '200':
+        "200":
           description: Service is healthy
           content:
             application/json:
@@ -411,7 +411,7 @@ paths:
                       database:
                         type: string
                         example: connected
-        '503':
+        "503":
           description: Service is unhealthy
           content:
             application/json:
@@ -462,12 +462,12 @@ components:
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/AddressRequest'
+            $ref: "#/components/schemas/AddressRequest"
           description: Optional list of addresses
         contacts:
           type: array
           items:
-            $ref: '#/components/schemas/ContactRequest'
+            $ref: "#/components/schemas/ContactRequest"
           description: Optional list of contacts
 
     UpdatePersonRequest:
@@ -501,11 +501,11 @@ components:
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/AddressRequest'
+            $ref: "#/components/schemas/AddressRequest"
         contacts:
           type: array
           items:
-            $ref: '#/components/schemas/ContactRequest'
+            $ref: "#/components/schemas/ContactRequest"
 
     AddressRequest:
       type: object
@@ -581,11 +581,11 @@ components:
         addresses:
           type: array
           items:
-            $ref: '#/components/schemas/AddressResponse'
+            $ref: "#/components/schemas/AddressResponse"
         contacts:
           type: array
           items:
-            $ref: '#/components/schemas/ContactResponse'
+            $ref: "#/components/schemas/ContactResponse"
         created_at:
           type: string
           format: date-time
@@ -629,9 +629,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/PersonSummary'
+            $ref: "#/components/schemas/PersonSummary"
         pagination:
-          $ref: '#/components/schemas/PaginationResponse'
+          $ref: "#/components/schemas/PaginationResponse"
 
     PersonSummary:
       type: object
