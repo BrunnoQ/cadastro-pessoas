@@ -366,7 +366,6 @@ Based on Clean Architecture single-project structure (Go):
 
 - [X] T120 [P] Verify Docker image builds correctly and is <50MB
 - [ ] T121 [P] Test docker-compose.yml with all services
-- [X] T122 [P] Create CI/CD pipeline configuration (.github/workflows/ci.yml)
 - [ ] T123 [P] Create deployment documentation for BETA and PROD environments
 
 **Final Checkpoint**: Production-ready application with complete CRUD API
