@@ -35,6 +35,11 @@ func LoggingMiddleware(log *logger.Logger) gin.HandlerFunc {
 			zap.String("user_agent", c.Request.UserAgent()),
 		}
 
+		// Add request ID if present
+		if requestID := GetRequestID(c); requestID != "" {
+			fields = append(fields, zap.String("request_id", requestID))
+		}
+
 		// Add error if present
 		if len(c.Errors) > 0 {
 			fields = append(fields, zap.String("error", c.Errors.String()))

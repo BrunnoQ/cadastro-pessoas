@@ -102,9 +102,12 @@ func main() {
 	router := httpHandler.NewRouter(healthHandler, personHandler)
 	engine := router.Engine()
 
-	// Apply middleware
+	// Apply middleware (order matters!)
 	engine.Use(middleware.RecoveryMiddleware(log))
+	engine.Use(middleware.RequestIDMiddleware())
 	engine.Use(middleware.LoggingMiddleware(log))
+	engine.Use(middleware.SecurityHeadersMiddleware())
+	engine.Use(middleware.CompressionMiddleware())
 	engine.Use(middleware.CORSMiddleware())
 	engine.Use(middleware.ValidationMiddleware())
 
