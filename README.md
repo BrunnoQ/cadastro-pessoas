@@ -24,6 +24,7 @@ Sistema completo de gerenciamento de pessoas desenvolvido em Go, seguindo princ�
 - Go 1.24 ou superior
 - Docker e Docker Compose
 - Make (opcional, mas recomendado)
+- **VS Code** (recomendado - veja [VS Code Quick Start Guide](docs/VSCODE_GUIDE.md))
 
 ### Instalação
 
@@ -41,13 +42,23 @@ cp configs/config.local.yaml.example configs/config.local.yaml
 # Edite configs/config.local.yaml conforme necessário
 ```
 
-3. **Inicie o MongoDB com Docker**
+3. **Abra no VS Code (recomendado)**
+
+```bash
+code .
+# Pressione F5 para iniciar com debugger
+# Ou veja docs/VSCODE_GUIDE.md para guia completo
+```
+
+4. **OU inicie manualmente:**
+
+**Inicie o MongoDB com Docker**
 
 ```bash
 docker-compose up -d
 ```
 
-4. **Instale as dependências**
+**Instale as dependências**
 
 ```bash
 go mod download
