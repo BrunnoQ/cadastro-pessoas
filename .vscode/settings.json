@@ -9,6 +9,99 @@
     "chat.tools.terminal.autoApprove": {
         ".specify/scripts/bash/": true,
         ".specify/scripts/powershell/": true
-    }
+    },
+    "go.useLanguageServer": true,
+    "go.lintTool": "golangci-lint",
+    "go.lintOnSave": "workspace",
+    "go.formatTool": "goimports",
+    "go.formatOnSave": true,
+    "go.buildOnSave": "workspace",
+    "go.vetOnSave": "workspace",
+    "go.testOnSave": false,
+    "go.coverOnSave": false,
+    "go.coverageDecorator": {
+        "type": "gutter",
+        "coveredHighlightColor": "rgba(64,128,128,0.5)",
+        "uncoveredHighlightColor": "rgba(128,64,64,0.25)",
+        "coveredGutterStyle": "blockgreen",
+        "uncoveredGutterStyle": "blockred"
+    },
+    "go.toolsManagement.autoUpdate": true,
+    "go.alternateTools": {
+        "dlv": "/home/brunno/go/bin/dlv"
+    },
+    "gopls": {
+        "ui.semanticTokens": true,
+        "ui.completion.usePlaceholders": true,
+        "formatting.gofumpt": true,
+        "analyses": {
+            "unusedparams": true,
+            "shadow": true,
+            "fieldalignment": false
+        }
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": false,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        "**/bin": true,
+        "**/vendor": true,
+        "**/*.out": true
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/bin/**": true,
+        "**/vendor/**": true
+    },
+    "files.associations": {
+        "*.yaml": "yaml",
+        "*.yml": "yaml",
+        "Dockerfile*": "dockerfile",
+        ".air.toml": "toml"
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/vendor": true,
+        "**/bin": true,
+        "**/*.code-search": true
+    },
+    "terminal.integrated.env.linux": {
+        "GO111MODULE": "on"
+    },
+    "terminal.integrated.env.osx": {
+        "GO111MODULE": "on"
+    },
+    "terminal.integrated.env.windows": {
+        "GO111MODULE": "on"
+    },
+    "go.testFlags": [
+        "-v",
+        "-race"
+    ],
+    "go.testTimeout": "30s",
+    "go.coverMode": "atomic",
+    "go.delveConfig": {
+        "dlvLoadConfig": {
+            "followPointers": true,
+            "maxVariableRecurse": 1,
+            "maxStringLen": 120,
+            "maxArrayValues": 64,
+            "maxStructFields": -1
+        },
+        "apiVersion": 2,
+        "showGlobalVariables": false
+    },
+    "markdown.preview.breaks": true,
+    "markdown.preview.linkify": true,
+    "git.ignoreLimitWarning": true,
+    "extensions.ignoreRecommendations": false
 }
-
