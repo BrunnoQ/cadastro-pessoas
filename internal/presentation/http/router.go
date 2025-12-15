@@ -46,6 +46,7 @@ func (r *Router) SetupRoutes() {
 		v1.POST("/persons", r.personHandler.Create)
 		v1.GET("/persons/:id", r.personHandler.GetByID)
 		v1.PUT("/persons/:id", r.personHandler.Update)
+		v1.DELETE("/persons/:id", r.personHandler.Delete)
 	}
 }
 

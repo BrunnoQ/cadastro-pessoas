@@ -74,6 +74,7 @@ type PersonHandler struct {
 	getPersonUseCase    *usecases.GetPersonUseCase
 	listPersonsUseCase  *usecases.ListPersonsUseCase
 	updatePersonUseCase *usecases.UpdatePersonUseCase
+	deletePersonUseCase *usecases.DeletePersonUseCase
 	logger              *logger.Logger
 }
 
@@ -83,6 +84,7 @@ func NewPersonHandler(
 	getPersonUseCase *usecases.GetPersonUseCase,
 	listPersonsUseCase *usecases.ListPersonsUseCase,
 	updatePersonUseCase *usecases.UpdatePersonUseCase,
+	deletePersonUseCase *usecases.DeletePersonUseCase,
 	log *logger.Logger,
 ) *PersonHandler {
 	return &PersonHandler{
@@ -90,6 +92,7 @@ func NewPersonHandler(
 		getPersonUseCase:    getPersonUseCase,
 		listPersonsUseCase:  listPersonsUseCase,
 		updatePersonUseCase: updatePersonUseCase,
+		deletePersonUseCase: deletePersonUseCase,
 		logger:              log,
 	}
 }
@@ -191,4 +194,20 @@ func (h *PersonHandler) Update(c *gin.Context) {
 
 	h.logger.Info("Person updated successfully", zap.String("id", id))
 	c.JSON(http.StatusOK, person)
+}
+
+// Delete handles DELETE /api/v1/persons/:id
+func (h *PersonHandler) Delete(c *gin.Context) {
+	id := c.Param("id")
+	h.logger.Info("Received delete person request", zap.String("id", id))
+
+	if err := h.deletePersonUseCase.Execute(c.Request.Context(), id); err != nil {
+		h.logger.Error("Failed to delete person", zap.String("id", id), zap.Error(err))
+		statusCode, errResponse := ToErrorResponse(err)
+		c.JSON(statusCode, errResponse)
+		return
+	}
+
+	h.logger.Info("Person deleted successfully", zap.String("id", id))
+	c.JSON(http.StatusOK, gin.H{"message": "person deleted successfully"})
 }

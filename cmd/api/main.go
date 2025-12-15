@@ -85,6 +85,7 @@ func main() {
 	getPersonUseCase := usecases.NewGetPersonUseCase(personRepo, log)
 	listPersonsUseCase := usecases.NewListPersonsUseCase(personRepo, log)
 	updatePersonUseCase := usecases.NewUpdatePersonUseCase(personRepo, log)
+	deletePersonUseCase := usecases.NewDeletePersonUseCase(personRepo, log)
 
 	// Set Gin mode
 	if cfg.Server.Mode == "release" {
@@ -95,7 +96,7 @@ func main() {
 
 	// Initialize handlers
 	healthHandler := handlers.NewHealthHandler(dbConn)
-	personHandler := handlers.NewPersonHandler(createPersonUseCase, getPersonUseCase, listPersonsUseCase, updatePersonUseCase, log)
+	personHandler := handlers.NewPersonHandler(createPersonUseCase, getPersonUseCase, listPersonsUseCase, updatePersonUseCase, deletePersonUseCase, log)
 
 	// Create HTTP router
 	router := httpHandler.NewRouter(healthHandler, personHandler)
