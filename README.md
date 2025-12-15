@@ -74,6 +74,32 @@ make run
 
 A API estará disponível em `http://localhost:8080`
 
+### Gerenciamento da Aplicação
+
+**Parar a aplicação:**
+
+```bash
+# Método 1: Se iniciou com Ctrl+C, pressione Ctrl+C no terminal
+
+# Método 2: Matar processo por porta
+lsof -i :8080 | grep LISTEN | awk '{print $2}' | xargs kill -9
+
+# Método 3: Matar processo por nome
+pkill -9 cadastro-pessoas
+
+# Método 4: No VS Code, pressione Shift+F5 para parar o debug
+```
+
+**Verificar se a aplicação está rodando:**
+
+```bash
+# Verificar processo
+ps aux | grep cadastro-pessoas
+
+# Testar endpoint
+curl http://localhost:8080/api/v1/health
+```
+
 ## 📚 API Endpoints
 
 ### Health Check
