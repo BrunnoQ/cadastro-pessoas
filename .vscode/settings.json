@@ -27,6 +27,9 @@
         "uncoveredGutterStyle": "blockred"
     },
     "go.toolsManagement.autoUpdate": true,
+    "go.alternateTools": {
+        "dlv": "/home/brunno/go/bin/dlv"
+    },
     "gopls": {
         "ui.semanticTokens": true,
         "ui.completion.usePlaceholders": true,
